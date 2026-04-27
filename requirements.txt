@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pydantic-settings
+python-jose[cryptography]
+passlib
+python-multipart
+faiss-cpu
+numpy
+requests
+pypdf
+python-docx
+email-validator
