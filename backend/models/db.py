@@ -19,11 +19,19 @@ class Employee(Base):
     vacation_days: Mapped[int] = mapped_column(Integer, default=0)
     nearest_vacation: Mapped[str] = mapped_column(String(255), default="")
     birthday: Mapped[str] = mapped_column(String(100), default="")
-    role: Mapped[str] = mapped_column(String(50), default="employee")
+    role: Mapped[str] = mapped_column(String(50), default="worker")
     password: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     chat_logs: Mapped[list["ChatLog"]] = relationship(back_populates="employee")
+    hr_tickets_as_worker: Mapped[list["HRChatTicket"]] = relationship(
+        foreign_keys="HRChatTicket.worker_id",
+        back_populates="worker",
+    )
+    hr_tickets_as_manager: Mapped[list["HRChatTicket"]] = relationship(
+        foreign_keys="HRChatTicket.hr_manager_id",
+        back_populates="hr_manager",
+    )
 
 
 class DocumentChunk(Base):
@@ -49,3 +57,30 @@ class ChatLog(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
 
     employee: Mapped[Employee] = relationship(back_populates="chat_logs")
+
+
+class HRChatTicket(Base):
+    __tablename__ = "hr_chat_tickets"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    worker_id: Mapped[int] = mapped_column(ForeignKey("employees.id"), index=True)
+    hr_manager_id: Mapped[int] = mapped_column(ForeignKey("employees.id"), index=True)
+    status: Mapped[str] = mapped_column(String(50), default="open", index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    worker: Mapped[Employee] = relationship(foreign_keys=[worker_id], back_populates="hr_tickets_as_worker")
+    hr_manager: Mapped[Employee] = relationship(foreign_keys=[hr_manager_id], back_populates="hr_tickets_as_manager")
+    messages: Mapped[list["HRChatMessage"]] = relationship(back_populates="ticket", cascade="all, delete-orphan")
+
+
+class HRChatMessage(Base):
+    __tablename__ = "hr_chat_messages"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    ticket_id: Mapped[int] = mapped_column(ForeignKey("hr_chat_tickets.id"), index=True)
+    sender_id: Mapped[int] = mapped_column(ForeignKey("employees.id"), index=True)
+    message: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, index=True)
+
+    ticket: Mapped[HRChatTicket] = relationship(back_populates="messages")

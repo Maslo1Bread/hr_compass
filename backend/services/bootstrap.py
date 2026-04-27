@@ -5,11 +5,8 @@ from backend.models.db import Employee
 
 
 def seed_employees(db: Session) -> None:
-    if db.query(Employee).count() > 0:
-        return
-
-    demo = [
-        Employee(
+    demo = {
+        "work@portal-test.1221systems.ru": Employee(
             tab_number="1001",
             email="work@portal-test.1221systems.ru",
             full_name="Алексей Рабочев",
@@ -19,10 +16,23 @@ def seed_employees(db: Session) -> None:
             vacation_days=14,
             nearest_vacation="15.07.2026 - 28.07.2026",
             birthday="18 октября",
-            role="employee",
+            role="worker",
             password=hash_password("password123"),
         ),
-        Employee(
+        "dir@portal-test.1221systems.ru": Employee(
+            tab_number="2001",
+            email="dir@portal-test.1221systems.ru",
+            full_name="Мария Директорова",
+            position="Руководитель операционного департамента",
+            department="Операционный департамент",
+            manager="CEO",
+            vacation_days=21,
+            nearest_vacation="03.08.2026 - 16.08.2026",
+            birthday="7 мая",
+            role="manager",
+            password=hash_password("password123"),
+        ),
+        "hr@portal-test.1221systems.ru": Employee(
             tab_number="3001",
             email="hr@portal-test.1221systems.ru",
             full_name="Анна HR",
@@ -32,9 +42,15 @@ def seed_employees(db: Session) -> None:
             vacation_days=18,
             nearest_vacation="10.09.2026 - 23.09.2026",
             birthday="12 марта",
-            role="admin",
+            role="hr_manager",
             password=hash_password("password123"),
         ),
-    ]
-    db.add_all(demo)
+    }
+
+    for email, employee in demo.items():
+        existing = db.query(Employee).filter(Employee.email == email).first()
+        if existing:
+            existing.role = employee.role
+            continue
+        db.add(employee)
     db.commit()

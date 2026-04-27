@@ -9,7 +9,7 @@ class TokenResponse(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    login: str = Field(min_length=1)
+    email: EmailStr
     password: str = Field(min_length=1)
 
 
@@ -23,7 +23,7 @@ class EmployeeBase(BaseModel):
     vacation_days: int = 0
     nearest_vacation: str = ""
     birthday: str = ""
-    role: str = "employee"
+    role: str = "worker"
 
 
 class EmployeeCreate(EmployeeBase):
@@ -71,6 +71,41 @@ class ChatLogOut(BaseModel):
     answer: str
     sources: str
     is_unanswered: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class AssignHrManagerRequest(BaseModel):
+    user_id: int
+
+
+class HRCallRequest(BaseModel):
+    message: str = Field(min_length=2)
+
+
+class HRMessageRequest(BaseModel):
+    message: str = Field(min_length=1)
+
+
+class HRChatTicketOut(BaseModel):
+    id: int
+    worker_id: int
+    hr_manager_id: int
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class HRChatMessageOut(BaseModel):
+    id: int
+    ticket_id: int
+    sender_id: int
+    message: str
     created_at: datetime
 
     class Config:

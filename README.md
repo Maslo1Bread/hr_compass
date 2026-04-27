@@ -15,13 +15,18 @@ HR Assistant API (FastAPI + SQLite + FAISS + GigaChat)
 - `backend/rag/` - парсинг документов, чанкинг, FAISS индекс.
 
 3) Основные endpoint'ы
-- `POST /auth/login` - вход по email или tab number + password, выдача JWT.
+- `POST /auth/login` - вход по email + password, выдача JWT.
 - `GET /users/me` - профиль сотрудника.
 - `POST /chat` - вопрос сотрудника, ответ + источники.
 - `POST /admin/documents` - загрузка PDF/DOCX/TXT/MD и индексация.
 - `GET /admin/logs` - журнал вопросов/ответов.
 - `GET /admin/logs/unanswered` - вопросы без ответа.
-- `CRUD /users` - админ-управление сотрудниками.
+- `CRUD /users` - управление сотрудниками (руководитель и HR-менеджер по ролевым правилам).
+- `POST /users/{id}/assign-hr` - руководитель назначает сотрудника HR-менеджером.
+- `POST /hr-chat/call` - работник вызывает HR и открывает тикет.
+- `GET /hr-chat/my` - список HR-чатов для работника/HR-менеджера.
+- `GET /hr-chat/{id}/messages` - сообщения по тикету.
+- `POST /hr-chat/{id}/messages` - ответ HR-менеджера в тикете.
 
 4) RAG pipeline
 - Документ загружается через `/admin/documents`.
@@ -36,10 +41,24 @@ HR Assistant API (FastAPI + SQLite + FAISS + GigaChat)
 - Все запросы сохраняются в `chat_logs`.
 - `is_unanswered=true` для вопросов без ответа из базы знаний.
 
-6) Интеграция с frontend (без изменения UI)
+6) Роли и права
+- `manager`:
+  - загружает документы в базу знаний;
+  - назначает HR-менеджеров из существующих работников;
+  - создает аккаунты работников.
+- `hr_manager`:
+  - создает аккаунты работников;
+  - изменяет данные работников (отпуск, даты и т.д.);
+  - ведет переписку с работниками в HR-чатах.
+- `worker`:
+  - общается с чат-ботом;
+  - вызывает HR через HR-чат;
+  - просматривает список документов.
+
+7) Интеграция с frontend (без изменения UI)
 - Используйте готовый API-клиент: `app/api_client.js`.
 - Логика:
-  - логин: `login(login, password)`
+  - логин: `login(email, password)`
   - получить профиль: `getMyProfile()`
   - отправить вопрос: `askChat(question)`
 - Ответ чата содержит:
@@ -47,6 +66,7 @@ HR Assistant API (FastAPI + SQLite + FAISS + GigaChat)
   - `sources` (`document`, `section`)
   - `unanswered`
 
-7) Демо-пользователи (seed)
-- `work@portal-test.1221systems.ru` / `1001` / `password123`
-- `hr@portal-test.1221systems.ru` / `3001` / `password123` (admin)
+8) Демо-пользователи (seed)
+- `work@portal-test.1221systems.ru` / `password123` (`worker`)
+- `dir@portal-test.1221systems.ru` / `password123` (`manager`)
+- `hr@portal-test.1221systems.ru` / `password123` (`hr_manager`)

@@ -4,7 +4,7 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
-from backend.auth.deps import require_admin
+from backend.auth.deps import require_manager
 from backend.config import settings
 from backend.database import get_db
 from backend.models.db import ChatLog, DocumentChunk
@@ -12,7 +12,7 @@ from backend.models.schemas import ChatLogOut
 from backend.rag.ingest import ingest_file
 
 
-router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_admin)])
+router = APIRouter(prefix="/admin", tags=["admin"], dependencies=[Depends(require_manager)])
 
 
 @router.post("/documents")

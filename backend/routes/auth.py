@@ -14,7 +14,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     employee = (
         db.query(Employee)
-        .filter((Employee.email == payload.login) | (Employee.tab_number == payload.login))
+        .filter(Employee.email == payload.email)
         .first()
     )
     if not employee or not verify_password(payload.password, employee.password):

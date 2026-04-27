@@ -37,3 +37,18 @@ def require_admin(employee: Employee = Depends(get_current_employee)) -> Employe
     if employee.role.lower() != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
     return employee
+
+
+def require_roles(*roles: str):
+    allowed = {role.lower() for role in roles}
+
+    def checker(employee: Employee = Depends(get_current_employee)) -> Employee:
+        if employee.role.lower() not in allowed:
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
+        return employee
+
+    return checker
+
+
+require_manager = require_roles("manager")
+require_hr_or_manager = require_roles("hr_manager", "manager")
