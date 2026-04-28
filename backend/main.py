@@ -4,10 +4,10 @@ from pathlib import Path
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from app.server import INDEX_HTML, MANIFEST
+from app.server import MANIFEST
 from backend.auth.jwt import create_access_token, verify_password
 from backend.config import settings
 from backend.database import Base, SessionLocal, engine, get_db
@@ -368,6 +368,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="HR Assistant", lifespan=lifespan)
+FRONTEND_INDEX_PATH = Path(__file__).resolve().parents[1] / "frontend" / "index.html"
 
 app.add_middleware(
     CORSMiddleware,
@@ -389,14 +390,14 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 def frontend_index():
-    return INDEX_HTML.replace("</body>", EXTRA_UI_SCRIPT + "</body>")
+    return FileResponse(FRONTEND_INDEX_PATH)
 
 
-@app.get("/mobile", response_class=HTMLResponse)
+@app.get("/mobile")
 def frontend_mobile():
-    return INDEX_HTML.replace("</body>", EXTRA_UI_SCRIPT + "</body>")
+    return FileResponse(FRONTEND_INDEX_PATH)
 
 
 @app.get("/manifest.json")
