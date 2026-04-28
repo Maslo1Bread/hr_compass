@@ -5,6 +5,7 @@ from pathlib import Path
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from app.server import MANIFEST
@@ -368,7 +369,13 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="HR Assistant", lifespan=lifespan)
-FRONTEND_INDEX_PATH = Path(__file__).resolve().parents[1] / "index.html"
+FRONTEND_ROOT = Path(__file__).resolve().parents[1]
+FRONTEND_INDEX_PATH = FRONTEND_ROOT / "index.html"
+
+# Serve standalone frontend assets (index.html -> style1.css/script1.js + optional assets/).
+# Without this, the backend returns index.html but the browser gets 404 for CSS/JS.
+if (FRONTEND_ROOT / "assets").is_dir():
+    app.mount("/assets", StaticFiles(directory=str(FRONTEND_ROOT / "assets")), name="assets")
 
 app.add_middleware(
     CORSMiddleware,
@@ -403,6 +410,23 @@ def frontend_mobile():
 @app.get("/manifest.json")
 def frontend_manifest():
     return MANIFEST
+
+
+@app.get("/style1.css")
+def frontend_style():
+    path = FRONTEND_ROOT / "style1.css"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="style1.css not found")
+    return FileResponse(path, media_type="text/css")
+
+
+@app.get("/script1.js")
+def frontend_script():
+    path = FRONTEND_ROOT / "script1.js"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="script1.js not found")
+    # JS MIME is important so the browser executes it.
+    return FileResponse(path, media_type="application/javascript")
 
 
 # Compatibility endpoints for existing frontend logic.
