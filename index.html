@@ -1,74 +1,2910 @@
 <!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>HR‑платформа 1221</title>
-    <link rel="stylesheet" href="style1.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HR-платформа 1221</title>
+
+  <style>
+    :root {
+      --green: #6AB216;
+      --green-dark: #3f7f0d;
+      --green-soft: #ecf8df;
+      --ink: #151515;
+      --muted: #66705f;
+      --line: #dce9cf;
+      --bg: #f7fbf1;
+      --card: rgba(255, 255, 255, .9);
+      --danger: #b91c1c;
+      --shadow: 0 24px 70px rgba(45, 76, 18, .14);
+      --radius: 28px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(106, 178, 22, .22), transparent 30%),
+        radial-gradient(circle at 94% 12%, rgba(155, 229, 59, .22), transparent 28%),
+        linear-gradient(135deg, #fbfff6 0%, var(--bg) 52%, #eef8e2 100%);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: var(--green-dark);
+      font-weight: 900;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .shell {
+      width: min(1220px, calc(100% - 32px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 0;
+      display: grid;
+      align-items: center;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      gap: 20px;
+      min-height: min(820px, calc(100vh - 48px));
+    }
+
+    .panel,
+    .workspace {
+      border: 1px solid rgba(106, 178, 22, .22);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      overflow: hidden;
+    }
+
+    .panel {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-width: 0;
+    }
+
+    .brand {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 86px;
+      height: 86px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 30px rgba(106, 178, 22, .22);
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 0;
+      background: #fff;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.05;
+      letter-spacing: -.02em;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 22px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #f1fbe9, #fff);
+      border: 1px solid var(--line);
+    }
+
+    .hero h2 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 42px);
+      line-height: .98;
+      letter-spacing: -.05em;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .74);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .field {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 18px;
+      outline: none;
+      padding: 14px 16px;
+    }
+
+    .field:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 4px rgba(106, 178, 22, .16);
+    }
+
+    textarea.field {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 18px;
+      padding: 13px 16px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 12px 26px rgba(106, 178, 22, .26);
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: var(--green-dark);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .btn.dark {
+      background: var(--ink);
+      box-shadow: 0 12px 26px rgba(21, 21, 21, .18);
+    }
+
+    .btn.danger {
+      background: var(--danger);
+    }
+
+    .btn.small {
+      padding: 8px 11px;
+      border-radius: 13px;
+      font-size: 13px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 13px;
+      min-height: 18px;
+      margin-top: 8px;
+    }
+
+    .ok {
+      color: var(--green-dark);
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .employee-card {
+      display: none;
+    }
+
+    .employee-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .mini-avatar{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      background:var(--green-soft);
+      color:var(--green-dark);
+      display:grid;
+      place-items:center;
+      font-weight:950;
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+
+    .mini-avatar img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:4px;
+      background:transparent;
+    }
+
+    .employee-name {
+      font-weight: 950;
+    }
+
+    .employee-meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+
+    .facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .fact {
+      padding: 12px;
+      border-radius: 16px;
+      background: var(--green-soft);
+      border: 1px solid var(--line);
+    }
+
+    .fact b {
+      display: block;
+      font-size: 20px;
+      color: var(--green-dark);
+    }
+
+    .fact span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .role-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green-dark);
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid var(--line);
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 10px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 750;
+      text-align: left;
+    }
+
+    .tag::before {
+      content: "➜";
+      color: var(--green);
+      margin-right: 6px;
+    }
+
+    .source-details {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px dashed rgba(106, 178, 22, .45);
+      border-radius: 18px;
+      background: #fbfff6;
+      color: var(--ink);
+      line-height: 1.45;
+      font-size: 13px;
+    }
+
+    .source-details b {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--green-dark);
+    }
+
+    .topbar {
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255, 255, 255, .62);
+    }
+
+    .bot-id {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .bot-avatar{
+      flex:0 0 auto;
+      width:92px;
+      height:92px;
+      border-radius:20px;
+      display:grid;
+      place-items:center;
+      background:#fff;
+      border:1px solid var(--line);
+      overflow:hidden;
+      box-shadow:0 12px 24px rgba(106,178,22,.18);
+    }
+
+    .bot-avatar img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:0;
+      background:transparent;
+    }
+
+    .bot-name {
+      font-weight: 950;
+      font-size: 18px;
+    }
+
+    .bot-status {
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(106, 178, 22, .12);
+    }
+
+    .content {
+      min-height: 0;
+      overflow: auto;
+      padding: 22px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .tab.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .chat-layout {
+      display: grid;
+      grid-template-rows: 1fr auto auto;
+      height: calc(300vh - 600px);
+      min-height: 0;
+      max-height: calc(1000vh - 1000px);
+    }
+
+    .messages {
+      padding: 24px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      scroll-behavior: smooth;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    .msg-row {
+      display: flex;
+      gap: 16px;
+      align-items: flex-end;
+      max-width: 82%;
+    }
+
+    .msg-row.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .msg-row.bot {
+      align-self: flex-start;
+    }
+
+    .bubble {
+      padding: 14px 16px;
+      border-radius: 20px;
+      line-height: 1.48;
+      white-space: pre-wrap;
+      box-shadow: 0 10px 28px rgba(45, 76, 18, .08);
+      border: 1px solid var(--line);
+    }
+
+    .bot .bubble {
+      background: #fff;
+      border-bottom-left-radius: 6px;
+    }
+
+    .user .bubble {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+      border-bottom-right-radius: 6px;
+    }
+
+    .msg-avatar{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:var(--green-soft);
+      color:var(--green-dark);
+      font-size:12px;
+      font-weight:950;
+      flex:0 0 auto;
+      border:1px solid var(--line);
+      overflow:hidden;
+    }
+
+    .msg-avatar img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      padding:2px;
+      background:transparent;
+    }
+
+    .source {
+      display: block;
+      margin-top: 10px;
+      padding-top: 10px;
+      color: var(--green-dark);
+      border-top: 1px dashed rgba(106, 178, 22, .36);
+      font-size: 13px;
+      font-style: italic;
+    }
+
+    .quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 24px 16px;
+    }
+
+    .quick button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .quick button::before {
+      content: "➜";
+      color: var(--green);
+      margin-right: 6px;
+    }
+
+    .composer {
+      padding: 18px;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, .62);
+    }
+
+    .send-btn {
+      width: 58px;
+      min-width: 58px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      color: white;
+    }
+
+    .pixel-arrow {
+      display: inline-grid;
+      grid-template-columns: repeat(5, 5px);
+      grid-template-rows: repeat(5, 5px);
+      width: 25px;
+      height: 25px;
+    }
+
+    .pixel-arrow i {
+      width: 5px;
+      height: 5px;
+      display: block;
+    }
+
+    .pixel-arrow i.on {
+      background: currentColor;
+    }
+
+    .typing {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      padding: 4px 0;
+    }
+
+    .typing span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: .15s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: .3s;
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: .35;
+      }
+
+      40% {
+        transform: translateY(-5px);
+        opacity: 1;
+      }
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .module {
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 24px;
+    }
+
+    .module h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .table-wrap {
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 980px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    .role-cell{display:flex;align-items:center;gap:10px}
+    .role-cell img{width:36px;height:36px;border-radius:12px;border:1px solid var(--line);background:#fff;padding:2px;object-fit:contain}
+
+    .data-table th {
+      background: #f4faec;
+      color: var(--green-dark);
+      font-weight: 950;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .status {
+      font-weight: 950;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      background: var(--green-soft);
+      color: var(--green-dark);
+      border: 1px solid var(--line);
+    }
+
+    .status.pending {
+      background: #fff8e7;
+      color: #8a5a00;
+    }
+
+    .status.signed {
+      background: var(--green-soft);
+      color: var(--green-dark);
+    }
+
+    .hr-chat {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 14px;
+      height: calc(100vh - 210px);
+      min-height: 0;
+      max-height: calc(100vh - 210px);
+    }
+
+    .chat-list {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      padding: 10px;
+      overflow: auto;
+      min-height: 0;
+    }
+
+    .chat-person {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      background: #fff;
+      border-radius: 16px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .chat-person.active,
+    .chat-person:hover {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .chat-panel {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fff;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .chat-panel-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hr-messages {
+      padding: 16px;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    .hr-msg {
+      max-width: 75%;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: #f7fbf1;
+      border: 1px solid var(--line);
+      white-space: pre-wrap;
+    }
+
+    .hr-msg.me {
+      align-self: flex-end;
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .hr-msg.them {
+      align-self: flex-start;
+    }
+
+    .hr-composer {
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .kedo-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .notice {
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff8e7;
+      border: 1px solid #f1d48a;
+      color: #7a5200;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 980px) {
+      .shell {
+        width: min(100% - 20px, 760px);
+        padding: 10px 0;
+        align-items: start;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .panel {
+        order: 2;
+        padding: 18px;
+      }
+
+      .workspace {
+        order: 1;
+        min-height: 70vh;
+      }
+
+      .module-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hr-chat {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+
+      .msg-row {
+        max-width: 94%;
+      }
+
+      .messages {
+        padding: 16px;
+      }
+
+      .quick {
+        padding: 0 16px 12px;
+      }
+
+      .composer {
+        padding: 12px;
+      }
+
+      .topbar {
+        padding: 16px;
+      }
+
+      .content {
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        overflow-x: hidden;
+      }
+
+      .app,
+      .shell,
+      .workspace {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 12px;
+        flex-wrap: wrap;
+      }
+
+      .bot-id {
+        min-width: 0;
+        flex: 1 1 180px;
+      }
+
+      .bot-name {
+        font-size: 16px;
+        white-space: normal;
+      }
+
+      .bot-status {
+        display: none;
+      }
+
+      #logoutBtn {
+        flex: 1 1 100%;
+        width: 100%;
+        min-height: 46px;
+        margin-top: 8px;
+        font-size: 15px;
+        border-radius: 18px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+      }
+
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tab {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        min-height: 42px;
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+
+      .chat-layout {
+        min-height: 0;
+        height: calc(100vh - 220px);
+        max-height: calc(100vh - 220px);
+      }
+
+      .messages {
+        padding: 12px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      .bubble {
+        max-width: 100%;
+        font-size: 15px;
+        line-height: 1.45;
+        word-break: break-word;
+      }
+
+      .msg-row {
+        gap: 8px;
+        max-width: 96%;
+      }
+
+      .composer {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        background: rgba(250, 255, 246, .96);
+        backdrop-filter: blur(10px);
+      }
+
+      .composer input {
+        min-width: 0;
+        flex: 1;
+        font-size: 15px;
+        border-radius: 16px;
+      }
+
+      .send-btn {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        border-radius: 16px;
+        padding: 0;
+      }
+
+      .card,
+      .panel,
+      .module {
+        border-radius: 22px;
+        padding: 16px;
+      }
+
+      .row,
+      .form-grid {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .facts {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        display: none;
+      }
+
+      table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  /* role-icon-final-fix */
+
+    @media (max-width:720px){
+      .bot-avatar{width:72px!important;height:72px!important;min-width:72px!important}
+      .msg-avatar{width:50px!important;height:50px!important;min-width:50px!important}
+      .mini-avatar{width:46px!important;height:46px!important;min-width:46px!important}
+    }
+
+  </style>
 </head>
+
 <body>
-<div class="shell">
+  <div class="shell">
     <section class="app">
-        <aside class="panel">
-            <div class="brand">
-                <div class="logo"><img src="assets/robot-logo.svg" alt="Логотип HR-Ассистента"></div>
-                <div><h1>HR‑платформа 1221</h1>
-                    <p>Локальная система сотрудников, HR и руководителя</p></div>
+      <aside class="panel">
+        <div class="brand">
+          <div class="logo">
+            <img src="assets/logo.png" alt="Логотип компании">
+          </div>
+          <div>
+            <h1>HR-платформа 1221</h1>
+            <p>Локальная система сотрудников, HR и руководителя</p>
+          </div>
+        </div>
+
+        <div class="hero">
+          <h2>HR без очередей</h2>
+          <p>Сотрудник получает ответы и вызывает HR, HR ведёт переписку и регистрацию, руководитель подписывает КЭДО и управляет данными.</p>
+        </div>
+
+        <div class="card" id="loginCard">
+          <h3>Вход в систему</h3>
+          <div class="row">
+            <input class="field" id="loginInput" placeholder="Табельный номер или почта">
+            <input class="field" id="passwordInput" type="password" placeholder="Пароль">
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="loginBtn">Войти</button>
+            <button class="btn secondary" id="demoBtn">Заполнить работника</button>
+          </div>
+          <div class="hint">
+            Демо-пользователи:<br>
+            work@portal-test.1221systems.ru / password123 — работник<br>
+            dir@portal-test.1221systems.ru / password123 — руководитель<br>
+            hr@portal-test.1221systems.ru / password123 — HR<br>
+            Также можно входить по табельному номеру: 101, 900, 102.
+          </div>
+          <div class="error" id="loginError"></div>
+        </div>
+
+        <div class="card employee-card" id="profileCard">
+          <div class="employee-top">
+            <div class="mini-avatar" id="profileAvatar">—</div>
+            <div>
+              <div class="employee-name" id="profileName">—</div>
+              <div class="employee-meta" id="profileMeta">—</div>
+              <div style="margin-top:6px">
+                <span class="role-pill" id="profileRole">—</span>
+              </div>
             </div>
-            <div class="hero"><h2>HR без очередей</h2>
-                <p>Сотрудник получает ответы и вызывает HR, HR ведёт переписку и регистрацию, руководитель подписывает
-                    КЭДО и управляет данными.</p></div>
-            <div class="card" id="loginCard"><h3>Вход в систему</h3>
-                <div class="row"><input class="field" id="loginInput" placeholder="Табельный номер или почта"><input
-                        class="field" id="passwordInput" type="password" placeholder="Пароль"></div>
-                <div class="row" style="margin-top:10px">
-                    <button class="btn" id="loginBtn">Войти</button>
-                    <button class="btn secondary" id="demoBtn">Заполнить работника</button>
-                </div>
-                <div class="hint">
-                    Демо-пользователи:<br>
-                    work@portal-test.1221systems.ru / password123 — работник<br>
-                    dir@portal-test.1221systems.ru / password123 — руководитель<br>
-                    hr@portal-test.1221systems.ru / password123 — HR<br>
-                    Также можно входить по табельному номеру: 101, 900, 102.
-                </div>
-                <div class="error" id="loginError"></div>
+          </div>
+          <div class="facts">
+            <div class="fact">
+              <b id="profileVacation">—</b>
+              <span>дней отпуска</span>
             </div>
-            <div class="card employee-card" id="profileCard">
-                <div class="employee-top">
-                    <div class="mini-avatar" id="profileAvatar">—</div>
-                    <div>
-                        <div class="employee-name" id="profileName">—</div>
-                        <div class="employee-meta" id="profileMeta">—</div>
-                        <div style="margin-top:6px"><span class="role-pill" id="profileRole">—</span></div>
-                    </div>
-                </div>
-                <div class="facts">
-                    <div class="fact"><b id="profileVacation">—</b><span>дней отпуска</span></div>
-                    <div class="fact"><b id="profileTab">—</b><span>табельный номер</span></div>
-                </div>
+            <div class="fact">
+              <b id="profileTab">—</b>
+              <span>табельный номер</span>
             </div>
-            <div class="card" id="sourcesCard"><h3>Локальные источники</h3>
-                <div class="tag-list" id="sourceTags"></div>
-                <div class="source-details" id="sourceDetails"></div>
+          </div>
+        </div>
+
+        <div class="card" id="sourcesCard">
+          <h3>Локальные источники</h3>
+          <div class="tag-list" id="sourceTags"></div>
+          <div class="source-details" id="sourceDetails"></div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div class="bot-id">
+            <div class="bot-avatar">
+              <img src="assets/robot-happy.png" alt="HR-Ассистент 1221">
             </div>
-        </aside>
-        <main class="workspace">
-            <header class="topbar">
-                <div class="bot-id">
-                    <div class="bot-avatar"><img src="assets/robot-logo.svg" alt="HR-Ассистент 1221"></div>
-                    <div>
-                        <div class="bot-name" id="workspaceTitle">HR‑Ассистент 1221</div>
-                        <div class="bot-status"><span class="dot"></span><span
-                                id="workspaceStatus">работает локально</span></div>
-                    </div>
-                </div>
-                <button class="btn secondary" id="logoutBtn">Сменить пользователя</button>
-            </header>
-            <div class="content" id="content"></div>
-        </main>
+            <div>
+              <div class="bot-name" id="workspaceTitle">HR-Ассистент 1221</div>
+              <div class="bot-status">
+                <span class="dot"></span>
+                <span id="workspaceStatus">работает локально</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn secondary" id="logoutBtn">Сменить пользователя</button>
+        </header>
+
+        <div class="content" id="content"></div>
+      </main>
     </section>
-</div>
-<script src="script1.js"></script>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const logo = 'assets/robot-happy.png';
+    const sadLogo = 'assets/robot-sad.png';
+    const hrContact = 'hr@1221systems.ru';
+
+    const defaultUsers = [
+      {
+        id: '101',
+        tab: '101',
+        email: 'work@portal-test.1221systems.ru',
+        password: 'password123',
+        role: 'employee',
+        fullName: 'Иван Иванов',
+        firstName: 'Иван',
+        lastName: 'Иванов',
+        aliases: ['иван', 'ивана', 'ивану', 'иванов', 'иванова', 'иванову', 'ивановым', 'иванове'],
+        vacationDays: 21,
+        vacationTotalDays: 28,
+        vacationStart: '03.08.2026',
+        vacationEnd: '16.08.2026',
+        birthday: '21.03',
+        children: '2 ребенка (5 и 9 лет)',
+        isHR: false
+      },
+      {
+        id: '102',
+        tab: '102',
+        email: 'hr@portal-test.1221systems.ru',
+        password: 'password123',
+        role: 'hr',
+        fullName: 'Мария Директорова',
+        firstName: 'Мария',
+        lastName: 'Директорова',
+        aliases: ['мария', 'марии', 'марию', 'директорова', 'директоровой', 'директорову', 'директоровым', 'директорове'],
+        vacationDays: 14,
+        vacationTotalDays: 28,
+        vacationStart: '',
+        vacationEnd: '',
+        birthday: '12.05',
+        children: 'нет детей',
+        isHR: true
+      },
+      {
+        id: '103',
+        tab: '103',
+        email: 'petrov@portal-test.1221systems.ru',
+        password: 'password123',
+        role: 'employee',
+        fullName: 'Андрей Петров',
+        firstName: 'Андрей',
+        lastName: 'Петров',
+        aliases: ['андрей', 'андрея', 'андрею', 'петров', 'петрова', 'петрову', 'петровым', 'петрове'],
+        vacationDays: 0,
+        vacationTotalDays: 28,
+        vacationStart: '',
+        vacationEnd: '',
+        birthday: '24.11',
+        children: '3 ребенка (8, 12, 15 лет)',
+        isHR: false
+      },
+      {
+        id: '900',
+        tab: '900',
+        email: 'dir@portal-test.1221systems.ru',
+        password: 'password123',
+        role: 'manager',
+        fullName: 'Ольга Руководитель',
+        firstName: 'Ольга',
+        lastName: 'Руководитель',
+        aliases: ['ольга', 'руководитель', 'руководителя'],
+        vacationDays: 28,
+        vacationTotalDays: 28,
+        vacationStart: '',
+        vacationEnd: '',
+        birthday: '07.09',
+        children: '1 ребенок (10 лет)',
+        isHR: false
+      }
+    ];
+
+    const knowledgeBase = {
+      vacation: {
+        title: 'График отпусков 2026',
+        summary: 'Персональный остаток отпуска и даты ближайшего отпуска.',
+        path: '/docs/vacation-2026.pdf',
+        example: 'Сколько у меня осталось дней отпуска?'
+      },
+      vacationTransfer: {
+        title: 'ПВТР п.4.2 – перенос отпуска',
+        summary: 'Перенос оформляется заявлением после согласования с руководителем и HR.',
+        path: '/docs/pvtr.pdf#p4.2',
+        example: 'Как перенести отпуск?'
+      },
+      sickLeave: {
+        title: 'Положение об оплате больничных п.3.1',
+        summary: 'Больничный оплачивается по электронному листку нетрудоспособности.',
+        path: '/docs/sick-leave.docx#p3.1',
+        example: 'Как оплачивается больничный?'
+      },
+      payslip: {
+        title: 'Инструкция «Расчётный лист» п.2.1',
+        summary: 'Расчётный лист скачивается в личном кабинете в разделе «Зарплата».',
+        path: '/portal/payroll/payslip',
+        example: 'Где скачать расчетный лист?'
+      },
+      merch: {
+        title: 'Инструкция по мерчу – /merch',
+        summary: 'Заказ мерча оформляется через раздел /merch с выбором товара и размера.',
+        path: '/merch',
+        example: 'Как заказать мерч?'
+      },
+      dms: {
+        title: 'Положение о ДМС п.1.2 – 2 программы',
+        summary: 'Доступны базовая и расширенная программы ДМС.',
+        path: '/benefits/dms',
+        example: 'Какие программы ДМС есть?'
+      },
+      referral: {
+        title: 'Реферальная форма – /referral',
+        summary: 'Рекомендация кандидата оформляется через форму /referral.',
+        path: '/referral',
+        example: 'Как порекомендовать друга?'
+      },
+      advance: {
+        title: 'Положение об оплате труда п.5.1',
+        summary: 'Аванс выплачивается 27 числа, зарплата — 12 числа следующего месяца.',
+        path: '/docs/payroll-policy.docx#p5.1',
+        example: 'Сколько дней до аванса?'
+      },
+      certificate: {
+        title: 'Инструкция HR-отдела по кадровым документам п.2.3',
+        summary: 'Справки передаются в HR лично, сканом или через внутреннюю форму.',
+        path: '/docs/hr-documents.docx#p2.3',
+        example: 'Куда нести справку?'
+      },
+      birthday: {
+        title: 'Персональная карточка сотрудника',
+        summary: 'Даты рождения берутся из карточек сотрудников локальной базы.',
+        path: '/local/employees',
+        example: 'Когда день рождения Директоровой?'
+      },
+      children: {
+        title: 'Персональная карточка сотрудника',
+        summary: 'Данные о детях берутся только из карточек сотрудников локальной базы.',
+        path: '/local/employees',
+        example: 'Сколько детей у Петрова?'
+      },
+      kedo: {
+        title: 'Регламент КЭДО п.1.4',
+        summary: 'Работник отправляет заявление, руководитель подписывает его в локальном кабинете.',
+        path: '/docs/kedo-regulation.docx#p1.4',
+        example: 'Отправить заявление на отпуск'
+      },
+      fallback: {
+        title: 'Контакт HR-поддержки',
+        summary: 'Если ответа нет в базе, вопрос передаётся HR.',
+        path: 'mailto:hr@1221systems.ru',
+        example: 'Написать в HR'
+      }
+    };
+
+    const sourceKeys = [
+      'vacation',
+      'vacationTransfer',
+      'dms',
+      'merch',
+      'referral',
+      'advance',
+      'certificate',
+      'kedo'
+    ];
+
+    let state;
+    let currentUser = null;
+    let selectedHrChat = null;
+
+    function normalize(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/ё/g, 'е')
+        .replace(/[.,!?;:()«»"']/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function initials(name) {
+      return String(name || '??')
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(x => x[0])
+        .join('')
+        .toUpperCase();
+    }
+
+    function roleName(role) {
+      if (role === 'manager') return 'Руководитель';
+      if (role === 'hr') return 'HR';
+      return 'Работник';
+    }
+
+    function roleIcon(role){
+      if(role === 'manager') return 'assets/icon-manager.png';
+      if(role === 'hr') return 'assets/icon-hr.png';
+      return 'assets/icon-worker.png';
+    }
+
+
+    function botIconByMood(mood='happy'){
+      return mood === 'sad' ? sadLogo : logo;
+    }
+
+    function dayWord(n) {
+      n = Math.abs(Number(n));
+      const last = n % 10;
+      const lastTwo = n % 100;
+
+      if (last === 1 && lastTwo !== 11) return 'день';
+      if ([2, 3, 4].includes(last) && ![12, 13, 14].includes(lastTwo)) return 'дня';
+      return 'дней';
+    }
+
+    function formatDateRu(date) {
+      return date.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    }
+
+    function startOfDay(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    function diffDaysInclusive(start, end) {
+      return Math.floor((startOfDay(end) - startOfDay(start)) / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+    function daysBetween(from, to) {
+      return Math.ceil((startOfDay(to) - startOfDay(from)) / (1000 * 60 * 60 * 24));
+    }
+
+    function parseVacationDate(value, fallbackYear) {
+      const text = String(value || '').trim();
+      if (!text) return null;
+
+      const match = text.match(/^(\d{1,2})\.(\d{1,2})(?:\.(\d{4}))?$/);
+      if (!match) return null;
+
+      const day = Number(match[1]);
+      const month = Number(match[2]) - 1;
+      const year = Number(match[3]) || fallbackYear;
+      const date = new Date(year, month, day);
+
+      if (
+        Number.isNaN(date.getTime()) ||
+        date.getDate() !== day ||
+        date.getMonth() !== month ||
+        date.getFullYear() !== year
+      ) {
+        return null;
+      }
+
+      return startOfDay(date);
+    }
+
+    function getVacationPeriod(user) {
+      if (!user?.vacationStart || !user?.vacationEnd) return null;
+
+      const currentYear = new Date().getFullYear();
+      let start = parseVacationDate(user.vacationStart, currentYear);
+      if (!start) return null;
+
+      let end = parseVacationDate(user.vacationEnd, start.getFullYear());
+      if (!end) return null;
+
+      if (!/\.\d{4}$/.test(String(user.vacationEnd || '').trim()) && end < start) {
+        end = parseVacationDate(user.vacationEnd, start.getFullYear() + 1);
+      }
+
+      if (end < start) return null;
+
+      return { start, end };
+    }
+
+    function getVacationInfo(user, today = new Date()) {
+      const period = getVacationPeriod(user);
+      const totalDays = Number(user?.vacationTotalDays) || 28;
+      const normalizedToday = startOfDay(today);
+
+      if (!period) {
+        return {
+          totalDays,
+          plannedDays: 0,
+          remainingDays: Math.max(0, Number(user?.vacationDays) || totalDays),
+          status: 'notScheduled',
+          start: null,
+          end: null
+        };
+      }
+
+      const plannedDays = diffDaysInclusive(period.start, period.end);
+      const remainingDays = Math.max(0, totalDays - plannedDays);
+
+      if (normalizedToday < period.start) {
+        return {
+          totalDays,
+          plannedDays,
+          remainingDays,
+          status: 'upcoming',
+          daysUntilStart: daysBetween(normalizedToday, period.start),
+          start: period.start,
+          end: period.end
+        };
+      }
+
+      if (normalizedToday > period.end) {
+        return {
+          totalDays,
+          plannedDays,
+          remainingDays,
+          status: 'finished',
+          daysAfterEnd: daysBetween(period.end, normalizedToday),
+          start: period.start,
+          end: period.end
+        };
+      }
+
+      return {
+        totalDays,
+        plannedDays,
+        remainingDays,
+        status: 'active',
+        dayNumber: diffDaysInclusive(period.start, normalizedToday),
+        daysLeftIncludingToday: diffDaysInclusive(normalizedToday, period.end),
+        start: period.start,
+        end: period.end
+      };
+    }
+
+    function adjustWeekendPayment(date) {
+      const adjusted = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+      if (adjusted.getDay() === 6) adjusted.setDate(adjusted.getDate() - 1);
+      if (adjusted.getDay() === 0) adjusted.setDate(adjusted.getDate() - 2);
+
+      return adjusted;
+    }
+
+    function getPaymentSchedule(fromDate = new Date()) {
+      const base = startOfDay(fromDate);
+      const candidates = [
+        { type: 'salary', date: adjustWeekendPayment(new Date(base.getFullYear(), base.getMonth(), 12)) },
+        { type: 'advance', date: adjustWeekendPayment(new Date(base.getFullYear(), base.getMonth(), 27)) },
+        { type: 'salary', date: adjustWeekendPayment(new Date(base.getFullYear(), base.getMonth() + 1, 12)) },
+        { type: 'advance', date: adjustWeekendPayment(new Date(base.getFullYear(), base.getMonth() + 1, 27)) },
+        { type: 'salary', date: adjustWeekendPayment(new Date(base.getFullYear(), base.getMonth() + 2, 12)) }
+      ].sort((a, b) => a.date - b.date);
+
+      const next = candidates.find(item => item.date >= base) || candidates[0];
+      const days = Math.max(0, daysBetween(base, next.date));
+
+      return {
+        nextType: next.type,
+        nextDate: next.date,
+        daysUntilNext: days,
+        advanceDate: candidates.find(item => item.type === 'advance' && item.date >= base)?.date || candidates[0].date,
+        salaryDate: candidates.find(item => item.type === 'salary' && item.date >= base)?.date || candidates[candidates.length - 1].date
+      };
+    }
+
+    function makeAliases(name) {
+      const parts = normalize(name).split(' ').filter(Boolean);
+      const result = [...parts];
+
+      parts.forEach(part => {
+        result.push(part + 'а');
+        result.push(part + 'у');
+        result.push(part + 'ой');
+        result.push(part + 'ым');
+        result.push(part + 'е');
+      });
+
+      return [...new Set(result)];
+    }
+
+    function escapeHtml(text) {
+      return String(text || '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[m]));
+    }
+
+    function loadState() {
+      try {
+        state = JSON.parse(localStorage.getItem('hr1221State') || 'null');
+      } catch (e) {
+        state = null;
+      }
+
+      if (!state) {
+        state = {
+          users: defaultUsers,
+          hrChats: {},
+          requests: {},
+          applications: [],
+          botMessages: {}
+        };
+        saveState();
+      }
+
+      ensureState();
+    }
+
+    function ensureState() {
+      state.users = state.users || [];
+      state.hrChats = state.hrChats || {};
+      state.requests = state.requests || {};
+      state.applications = state.applications || [];
+      state.botMessages = state.botMessages || {};
+
+      defaultUsers.forEach(seed => {
+        let user = state.users.find(x =>
+          String(x.tab) === String(seed.tab) ||
+          normalize(x.email) === normalize(seed.email) ||
+          String(x.id) === String(seed.id)
+        );
+
+        if (!user) {
+          state.users.push({ ...seed });
+          return;
+        }
+
+        Object.assign(user, {
+          id: seed.id,
+          tab: seed.tab,
+          email: seed.email,
+          password: seed.password,
+          role: seed.role,
+          isHR: seed.isHR,
+          firstName: seed.firstName,
+          lastName: seed.lastName
+        });
+
+        if (!user.fullName) user.fullName = seed.fullName;
+        if (user.vacationDays === undefined || user.vacationDays === null) user.vacationDays = seed.vacationDays;
+        if (!user.vacationTotalDays) user.vacationTotalDays = seed.vacationTotalDays;
+        if (!user.vacationStart) user.vacationStart = seed.vacationStart;
+        if (!user.vacationEnd) user.vacationEnd = seed.vacationEnd;
+        if (!user.aliases || !user.aliases.length) user.aliases = seed.aliases;
+        if (!user.birthday && seed.birthday) user.birthday = seed.birthday;
+        if (!user.children && seed.children) user.children = seed.children;
+      });
+
+      state.users.forEach(user => {
+        if (!user.id) user.id = user.tab;
+        if (user.role === 'hr') user.isHR = true;
+        if (!user.password) user.password = 'password123';
+        if (!user.vacationTotalDays) user.vacationTotalDays = 28;
+        if (!user.aliases) user.aliases = makeAliases(user.fullName || '');
+        const vacationInfo = getVacationInfo(user);
+        if (vacationInfo.start && vacationInfo.end) {
+          user.vacationDays = vacationInfo.remainingDays;
+        }
+      });
+
+      saveState();
+    }
+
+    function saveState() {
+      localStorage.setItem('hr1221State', JSON.stringify(state));
+    }
+
+    function setProfile(){
+      const shown = !!currentUser;
+      $('profileCard').style.display = shown ? 'block' : 'none';
+      if(!shown) return;
+
+      $('profileAvatar').innerHTML = `<img src="${roleIcon(currentUser.role)}" alt="${roleName(currentUser.role)}">`;
+      $('profileName').textContent = currentUser.fullName;
+      $('profileMeta').textContent = `${currentUser.email} • таб. № ${currentUser.tab}`;
+      $('profileRole').textContent = roleName(currentUser.role);
+      const vacationInfo = typeof getVacationInfo === 'function' ? getVacationInfo(currentUser) : null;
+      $('profileVacation').textContent = vacationInfo?.remainingDays ?? currentUser.vacationDays ?? '—';
+      $('profileTab').textContent = currentUser.tab;
+      $('workspaceStatus').textContent = typeof roleHint === 'function' ? roleHint() : `${roleName(currentUser.role)} • локальный режим`;
+    }
+
+    function renderSources() {
+      const box = $('sourceTags');
+      box.innerHTML = '';
+
+      sourceKeys.forEach(key => {
+        const button = document.createElement('button');
+        button.className = 'tag';
+        button.type = 'button';
+        button.textContent = knowledgeBase[key].title.replace(' – ', ' — ');
+        button.onclick = () => openSource(key);
+        box.appendChild(button);
+      });
+    }
+
+    function openSource(key) {
+      const source = knowledgeBase[key];
+      const details = $('sourceDetails');
+
+      details.style.display = 'block';
+      details.innerHTML = `
+        <b>${source.title}</b>
+        <div>${source.summary}</div>
+        <div style="margin-top:8px">Путь: <a href="#">${source.path}</a></div>
+        <div style="margin-top:8px">Пример: «${source.example}»</div>
+      `;
+
+      if (currentUser?.role === 'employee') {
+        botReply(
+          `Открываю локальный источник: ${source.title}\n\n${source.summary}\n\nПуть в демо-базе: ${source.path}\n\nМожете спросить: «${source.example}».`,
+          source.title,
+          false
+        );
+      }
+    }
+
+    function login() {
+      const loginValue = normalize($('loginInput').value);
+      const password = $('passwordInput').value || '';
+
+      const user = state.users.find(x =>
+        normalize(x.tab) === loginValue ||
+        normalize(x.email) === loginValue
+      );
+
+      if (!user || user.password !== password) {
+        $('loginError').textContent = 'Пользователь не найден или пароль неверный.';
+        return;
+      }
+
+      $('loginError').textContent = '';
+      currentUser = user;
+      setProfile();
+      renderApp();
+    }
+
+    function logout() {
+      currentUser = null;
+      selectedHrChat = null;
+      setProfile();
+      $('content').innerHTML = '<div class="notice">Введите табельный номер или корпоративную почту слева, чтобы открыть нужную роль: работник, HR или руководитель.</div>';
+      $('workspaceTitle').textContent = 'HR-Ассистент 1221';
+      $('workspaceStatus').textContent = 'работает локально';
+    }
+
+    $('loginBtn').onclick = login;
+    $('logoutBtn').onclick = logout;
+
+    $('demoBtn').onclick = () => {
+      $('loginInput').value = 'work@portal-test.1221systems.ru';
+      $('passwordInput').value = 'password123';
+    };
+
+    $('passwordInput').addEventListener('keydown', event => {
+      if (event.key === 'Enter') login();
+    });
+
+    $('loginInput').addEventListener('keydown', event => {
+      if (event.key === 'Enter') login();
+    });
+
+    function renderApp() {
+      if (!currentUser) return logout();
+
+      if (currentUser.role === 'manager') renderManager();
+      else if (currentUser.role === 'hr') renderHR();
+      else renderEmployee();
+    }
+
+    function setWorkspace(title) {
+      $('workspaceTitle').textContent = title;
+      $('workspaceStatus').textContent = currentUser
+        ? `${roleName(currentUser.role)} • локальный режим`
+        : 'работает локально';
+    }
+
+    function employeeTabs(active = 'bot') {
+      return `
+        <div class="tabs">
+          <button class="tab ${active === 'bot' ? 'active' : ''}" onclick="renderEmployee('bot')">HR-бот</button>
+          <button class="tab ${active === 'hrchat' ? 'active' : ''}" onclick="renderEmployee('hrchat')">Чат с HR</button>
+          <button class="tab ${active === 'kedo' ? 'active' : ''}" onclick="renderEmployee('kedo')">КЭДО</button>
+        </div>
+      `;
+    }
+
+    function managerTabs(active = 'users') {
+      return `
+        <div class="tabs">
+          <button class="tab ${active === 'users' ? 'active' : ''}" onclick="renderManager('users')">Работники</button>
+          <button class="tab ${active === 'register' ? 'active' : ''}" onclick="renderManager('register')">Регистрация</button>
+          <button class="tab ${active === 'docs' ? 'active' : ''}" onclick="renderManager('docs')">Подписание документов</button>
+        </div>
+      `;
+    }
+
+    function hrTabs(active = 'chats') {
+      return `
+        <div class="tabs">
+          <button class="tab ${active === 'chats' ? 'active' : ''}" onclick="renderHR('chats')">Переписка</button>
+          <button class="tab ${active === 'users' ? 'active' : ''}" onclick="renderHR('users')">Работники</button>
+          <button class="tab ${active === 'register' ? 'active' : ''}" onclick="renderHR('register')">Регистрация</button>
+        </div>
+      `;
+    }
+
+    function renderEmployee(tab = 'bot') {
+      setWorkspace('Кабинет работника');
+
+      if (tab === 'bot') renderEmployeeBot();
+      if (tab === 'hrchat') renderWorkerHrChat();
+      if (tab === 'kedo') renderWorkerKedo();
+    }
+
+    function renderEmployeeBot() {
+      const messages = state.botMessages[currentUser.id] || [];
+
+      $('content').innerHTML = `
+        ${employeeTabs('bot')}
+        <div class="chat-layout">
+          <div class="messages" id="messages"></div>
+          <div class="quick" id="quick"></div>
+          <form class="composer" id="composer">
+            <input class="field" id="questionInput" placeholder="Напишите вопрос HR-Ассистенту 1221" autocomplete="off">
+            <button class="btn send-btn" aria-label="Отправить">
+              <span class="pixel-arrow">
+                <i></i><i></i><i class="on"></i><i></i><i></i>
+                <i></i><i></i><i></i><i class="on"></i><i></i>
+                <i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i>
+                <i></i><i></i><i></i><i class="on"></i><i></i>
+                <i></i><i></i><i class="on"></i><i></i><i></i>
+              </span>
+            </button>
+          </form>
+        </div>
+      `;
+
+      const box = $('messages');
+
+      if (!messages.length) {
+        botReply(
+          `👋 Здравствуйте, ${currentUser.fullName}!\nЯ HR-Ассистент 1221. Работаю локально и отвечаю по базе знаний HR.\nЧем могу помочь?\nНапример, вы можете спросить:\n• Сколько у меня дней отпуска?\n• Хочу в отпуск летом\n• Куда нести справку?\n• Сколько дней до аванса?\n• Как порекомендовать друга?`,
+          'Локальная база сотрудников 1221',
+          false
+        );
+      } else {
+        messages.forEach(message => {
+          addChatBubble(box, message.role, message.text, message.source, false, message.mood || 'happy');
+        });
+      }
+
+      addChatBubble(
+        box,
+        'bot',
+        `💡 Я всегда рядом: напишите мне вопрос или нажмите быстрый вариант ниже — помогу с отпуском, авансом, справками, ДМС, КЭДО и обращением в HR.`,
+        'Подсказка HR-Ассистента 1221',
+        false,
+        'happy'
+      );
+
+      renderQuick();
+
+      $('composer').onsubmit = event => {
+        event.preventDefault();
+        askBot();
+      };
+
+      setTimeout(() => {
+        box.scrollTop = box.scrollHeight;
+      }, 0);
+    }
+
+    function addChatBubble(box, role, text, source, store = true, mood = 'happy'){
+      const row = document.createElement('div');
+      row.className = `msg-row ${role}`;
+
+      const av = document.createElement('div');
+      av.className = 'msg-avatar';
+
+      if(role === 'bot'){
+        av.innerHTML = `<img src="${botIconByMood(mood)}" alt="бот">`;
+      } else {
+        av.innerHTML = `<img src="${roleIcon(currentUser?.role || 'employee')}" alt="пользователь">`;
+      }
+
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      b.textContent = text;
+
+      if(source){
+        const s = document.createElement('span');
+        s.className = 'source';
+        s.textContent = `Основание: ${source}`;
+        b.appendChild(s);
+      }
+
+      row.append(av, b);
+      box.appendChild(row);
+      box.scrollTop = box.scrollHeight;
+
+      if(store && currentUser?.role === 'employee'){
+        state.botMessages[currentUser.id] = state.botMessages[currentUser.id] || [];
+        state.botMessages[currentUser.id].push({ role, text, source, mood });
+        saveState();
+      }
+    }
+
+    function botReply(text, source, store = true, mood = 'happy'){
+      const box = $('messages');
+      if(!box) return;
+
+      const typing = document.createElement('div');
+      typing.className = 'msg-row bot';
+      typing.innerHTML = `
+        <div class="msg-avatar">
+          <img src="${botIconByMood(mood)}" alt="бот">
+        </div>
+        <div class="bubble">
+          <span class="typing"><span></span><span></span><span></span></span>
+        </div>
+      `;
+
+      box.appendChild(typing);
+      box.scrollTop = box.scrollHeight;
+
+      setTimeout(() => {
+        typing.remove();
+        addChatBubble(box, 'bot', text, source, store, mood);
+      }, 220);
+    }
+
+    function renderQuick() {
+      const quickQuestions = [
+        'Сколько у меня дней отпуска?',
+        'Остаток отпуска',
+        'Сколько дней до аванса?',
+        'Как оплачивается больничный?',
+        'Где скачать расчетный лист?',
+        'Вызвать HR'
+      ];
+
+      const quick = $('quick');
+      quick.innerHTML = '';
+
+      quickQuestions.forEach(text => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = text;
+
+        button.onclick = () => {
+          if (text === 'Вызвать HR') callHR();
+          else askBot(text);
+        };
+
+        quick.appendChild(button);
+      });
+    }
+
+    function askBot(text) {
+      const input = $('questionInput');
+      const question = (text || input.value).trim();
+
+      if (!question) return;
+
+      addChatBubble($('messages'), 'user', question, '');
+
+      if (input) input.value = '';
+
+      const answer = answerQuestion(question);
+      botReply(answer.text, answer.source, true, answer.mood || (answer.hrButton ? 'sad' : 'happy'));
+
+      if (answer.hrButton) {
+        setTimeout(() => {
+          const button = document.createElement('button');
+          button.className = 'btn dark small';
+          button.textContent = 'Вызвать HR';
+          button.onclick = callHR;
+
+          const box = $('messages');
+          const row = document.createElement('div');
+          row.className = 'msg-row bot';
+
+          row.innerHTML = `<div class="msg-avatar"><img src="${sadLogo}"></div>`;
+
+          const bubble = document.createElement('div');
+          bubble.className = 'bubble';
+          bubble.textContent = 'Могу передать вопрос HR.';
+          bubble.appendChild(document.createElement('br'));
+          bubble.appendChild(button);
+
+          row.appendChild(bubble);
+          box.appendChild(row);
+          box.scrollTop = box.scrollHeight;
+        }, 260);
+      }
+    }
+
+    function has(text, words) {
+      return words.some(word => text.includes(word));
+    }
+
+    function findMentioned(text) {
+      const normalized = normalize(text);
+
+      return state.users.find(user =>
+        (user.aliases || []).some(alias =>
+          alias && normalized.includes(normalize(alias))
+        )
+      );
+    }
+
+    function detectIntent(raw) {
+      const text = normalize(raw);
+      const hasVacation = text.includes('отпуск');
+      const asksDays = /сколько|остат|остал|дн(ей|я|и)|мой/.test(text);
+
+      if (
+        /правил|порядок|срок|регламент|как выплачивается/.test(text) &&
+        /(аванс|зарплат|зп)/.test(text)
+      ) {
+        return 'advanceRules';
+      }
+
+      if (
+        has(text, [
+          'сколько дней до аванс',
+          'сколько до аванс',
+          'через сколько аванс',
+          'до аванса',
+          'когда аванс',
+          'когда будет аванс',
+          'аванс',
+          'когда зарплата',
+          'когда зп',
+          'когда будет зарплата',
+          'когда будет зп',
+          'до зарплаты',
+          'через сколько зарплата',
+          'через сколько зп',
+          'зарплата',
+          'зп'
+        ])
+      ) {
+        return 'advanceDays';
+      }
+
+      if (hasVacation && /всего|положено|за год|годовой/.test(text)) return 'vacationTotal';
+      if (hasVacation && has(text, ['когда отпуск', 'когда у меня отпуск', 'я в отпуске', 'у меня сейчас отпуск', 'идет отпуск', 'иду в отпуск'])) return 'vacationStatus';
+
+      if (
+        hasVacation &&
+        (
+          asksDays ||
+          has(text, [
+            'сколько у меня дней отпуска',
+            'сколько дней отпуска',
+            'остаток отпуска',
+            'сколько осталось отпуска',
+            'сколько отпуска',
+            'мой отпуск',
+            'дни отпуска'
+          ])
+        )
+      ) {
+        return 'vacationBalance';
+      }
+
+      if (has(text, ['хочу в отпуск', 'летом в отпуск', 'отпуск летом'])) return 'vacationPlan';
+      if (has(text, ['перенести отпуск', 'перенос отпуска'])) return 'transfer';
+      if (has(text, ['день рождения', 'др коллег'])) return 'birthday';
+      if (has(text, ['сколько детей', 'дети у', 'ребенок', 'ребенка', 'детей'])) return 'children';
+      if (has(text, ['мерч', 'магазин мерча', 'заказать мерч'])) return 'merch';
+      if (has(text, ['дмс', 'страховк', 'медицинск'])) return 'dms';
+      if (has(text, ['порекомендовать друга', 'рефераль', 'рекомендовать друга', 'друга на вакансию'])) return 'referral';
+      if (has(text, ['больничн', 'лист нетрудоспособности'])) return 'sickLeave';
+      if (has(text, ['расчетный лист', 'расчетный листок', 'расчётный лист', 'где скачать'])) return 'payslip';
+      if (has(text, ['справк', 'куда нести'])) return 'certificate';
+      if (has(text, ['адаптац', 'новичк'])) return 'adaptation';
+      if (has(text, ['реквизит'])) return 'requisites';
+      if (has(text, ['график работ', 'режим работ'])) return 'schedule';
+      if (has(text, ['оформить сотрудника', 'прием сотрудника', 'приём сотрудника'])) return 'hiring';
+      if (has(text, ['стажировк'])) return 'internship';
+      if (has(text, ['материальн'])) return 'liability';
+      if (has(text, ['преми'])) return 'bonus';
+
+      return 'unknown';
+    }
+
+    function answerQuestion(question) {
+      const intent = detectIntent(question);
+      const mentioned = findMentioned(question);
+      const src = key => knowledgeBase[key].title;
+
+      switch (intent) {
+        case 'vacationTotal': {
+          const vacationTotalInfo = getVacationInfo(currentUser);
+          return {
+            text:
+              `Всего по стандартному графику вам положено ${vacationTotalInfo.totalDays} календарных ${dayWord(vacationTotalInfo.totalDays)} отпуска в год.\n` +
+              `По текущим датам отпуска остаток составляет ${vacationTotalInfo.remainingDays} ${dayWord(vacationTotalInfo.remainingDays)}.`,
+            source: src('vacation')
+          };
+        }
+
+        case 'vacationBalance': {
+          const info = getVacationInfo(currentUser);
+          let details = '';
+
+          if (info.start && info.end) {
+            details = `\nЗапланированный отпуск: ${formatDateRu(info.start)} — ${formatDateRu(info.end)} (${info.plannedDays} ${dayWord(info.plannedDays)}).`;
+
+            if (info.status === 'active') {
+              details += `\nВы уже в отпуске. Сегодня ${info.dayNumber}-й день, осталось ${info.daysLeftIncludingToday} ${dayWord(info.daysLeftIncludingToday)} вместе с текущим днём.`;
+            } else if (info.status === 'upcoming') {
+              details += `\nДо начала отпуска осталось ${info.daysUntilStart} ${dayWord(info.daysUntilStart)}.`;
+            } else if (info.status === 'finished') {
+              details += '\nЭтот отпуск уже завершился.';
+            }
+          }
+
+          return {
+            text:
+              `У вас осталось ${info.remainingDays} ${dayWord(info.remainingDays)} отпуска.` + details,
+            source: src('vacation')
+          };
+        }
+
+        case 'vacationStatus': {
+          const info = getVacationInfo(currentUser);
+
+          if (!info.start || !info.end) {
+            return {
+              text: 'В системе пока не указаны даты вашего отпуска. Если подскажете период или оформите его через HR/КЭДО, я смогу определить статус автоматически.',
+              source: src('vacation')
+            };
+          }
+
+          if (info.status === 'active') {
+            return {
+              text:
+                `Вы уже в отпуске: ${formatDateRu(info.start)} — ${formatDateRu(info.end)}.\n` +
+                `Сегодня ${info.dayNumber}-й день отпуска, осталось ${info.daysLeftIncludingToday} ${dayWord(info.daysLeftIncludingToday)} вместе с текущим днём.\n` +
+                `После этого периода у вас останется ${info.remainingDays} ${dayWord(info.remainingDays)}.`,
+              source: src('vacation')
+            };
+          }
+
+          if (info.status === 'upcoming') {
+            return {
+              text:
+                `Ваш отпуск запланирован на ${formatDateRu(info.start)} — ${formatDateRu(info.end)}.\n` +
+                `До начала осталось ${info.daysUntilStart} ${dayWord(info.daysUntilStart)}.\n` +
+                `После этого периода у вас останется ${info.remainingDays} ${dayWord(info.remainingDays)}.`,
+              source: src('vacation')
+            };
+          }
+
+          return {
+            text:
+              `Последний указанный отпуск был на ${formatDateRu(info.start)} — ${formatDateRu(info.end)} и уже завершился.\n` +
+              `Текущий остаток отпуска: ${info.remainingDays} ${dayWord(info.remainingDays)}.`,
+            source: src('vacation')
+          };
+        }
+
+        case 'vacationPlan':
+          return {
+            text:
+              'Для отпуска летом нужно проверить доступные даты в графике и согласовать период с руководителем. Затем подайте заявление на перенос или планирование отпуска через КЭДО в этом кабинете. Если даты конфликтуют с графиком, вопрос согласует HR.',
+            source: src('vacationTransfer')
+          };
+
+        case 'transfer':
+          return {
+            text:
+              'Чтобы перенести отпуск:\n1) согласуйте новые даты с руководителем;\n2) подайте заявление через КЭДО;\n3) дождитесь подписания руководителем и подтверждения HR.\nЕсли по документам нельзя ответить однозначно, обратитесь к инспектору по кадрам.',
+            source: src('vacationTransfer')
+          };
+
+        case 'birthday':
+          if (!mentioned) {
+            return {
+              text: 'Уточните, пожалуйста, фамилию или имя коллеги. Например: «Когда день рождения Директоровой?»',
+              source: src('birthday')
+            };
+          }
+
+          return {
+            text: mentioned.birthday
+              ? `День рождения сотрудника ${mentioned.fullName}: ${mentioned.birthday}.`
+              : `В локальной карточке сотрудника ${mentioned.fullName} дата рождения не указана.`,
+            source: src('birthday')
+          };
+
+        case 'children':
+          if (!mentioned) {
+            return {
+              text: 'Уточните, пожалуйста, фамилию сотрудника. Например: «Сколько детей у Петрова?»',
+              source: src('children')
+            };
+          }
+
+          return {
+            text: mentioned.children
+              ? `У сотрудника ${mentioned.fullName}: ${mentioned.children}.`
+              : `В локальной базе нет подтверждённых данных о детях сотрудника ${mentioned.fullName}. Я не буду подставлять данные из отпусков, зарплаты или карточек других сотрудников.`,
+            source: src('children')
+          };
+
+        case 'merch':
+          return {
+            text:
+              'Оформить заказ в магазине мерча можно в разделе /merch. Выберите товар, размер и количество, заполните форму заказа и отправьте заявку. После подтверждения HR сообщит статус, наличие и способ получения.',
+            source: src('merch')
+          };
+
+        case 'dms':
+          return {
+            text:
+              'Доступны 2 программы ДМС: базовая и расширенная. Базовая включает основные медицинские услуги, расширенная — увеличенный перечень клиник и дополнительных опций. Детали: «Кафетерий льгот» → «Программа ДМС».',
+            source: src('dms')
+          };
+
+        case 'referral':
+          return {
+            text:
+              `Чтобы порекомендовать друга на вакансию, заполните форму /referral. Укажите ФИО и контакты кандидата, вакансию и короткий комментарий. Для дополнительных вопросов: ${hrContact}.`,
+            source: src('referral')
+          };
+
+        case 'advanceDays': {
+          const info = getPaymentSchedule();
+          const paymentLabel = info.nextType === 'advance' ? 'аванс' : 'зарплата';
+
+          return {
+            text:
+              `${info.daysUntilNext === 0
+                ? `${paymentLabel === 'аванс' ? 'Аванс' : 'Зарплата'} сегодня.`
+                : `До ближайшей выплаты (${paymentLabel}) осталось ${info.daysUntilNext} ${dayWord(info.daysUntilNext)}.`
+              }\n` +
+              `Ближайшая выплата: ${paymentLabel} ${formatDateRu(info.nextDate)}.\n` +
+              `Следующий аванс: ${formatDateRu(info.advanceDate)}. Следующая зарплата: ${formatDateRu(info.salaryDate)}.\n` +
+              `Если дата выплаты выпадает на выходной, выплата переносится на предыдущий рабочий день.`,
+            source: src('advance')
+          };
+        }
+
+        case 'advanceRules':
+          return {
+            text:
+              'По правилам аванс выплачивается 27 числа текущего месяца.\n' +
+              'Если дата выплаты приходится на выходной, выплата производится накануне.\n' +
+              'Окончательный расчёт заработной платы производится 12 числа следующего месяца.',
+            source: src('advance')
+          };
+
+        case 'sickLeave':
+          return {
+            text:
+              'Больничный оплачивается на основании электронного листка нетрудоспособности. Сообщите номер ЭЛН HR или бухгалтерии, чтобы данные проверили и передали в расчёт. Размер оплаты зависит от страхового стажа и действующего положения.',
+            source: src('sickLeave')
+          };
+
+        case 'payslip':
+          return {
+            text:
+              'Расчётный лист можно скачать во внутреннем личном кабинете в разделе «Зарплата» → «Расчётные листы». Выберите месяц и нажмите «Скачать PDF».',
+            source: src('payslip')
+          };
+
+        case 'certificate':
+          return {
+            text:
+              `Справку или кадровый документ нужно передать в HR-отдел: лично, сканом или через внутреннюю форму обращения. Укажите табельный номер и тип документа. Для нестандартных справок напишите HR: ${hrContact}.`,
+            source: src('certificate')
+          };
+
+        case 'adaptation':
+          return {
+            text:
+              'Для адаптации нового сотрудника используйте памятку новичка: контакты HR, базовая информация о компании, график работы, реквизиты и внутренние разделы. Начните с проверки доступа к почте, порталу и личному кабинету.',
+            source: 'Памятка нового сотрудника п.1.1'
+          };
+
+        case 'requisites':
+          return {
+            text:
+              'Реквизиты компании размещены в карточке организации на внутреннем портале: юридический адрес, ИНН/КПП и банковские реквизиты.',
+            source: 'Карточка организации на внутреннем портале'
+          };
+
+        case 'schedule':
+          return {
+            text:
+              'Режим работы определяется ПВТР. Индивидуальные режимы и сменность фиксируются в трудовом договоре или дополнительном соглашении.',
+            source: 'ПВТР п.3.1'
+          };
+
+        case 'hiring':
+          return {
+            text:
+              'Для оформления сотрудника руководитель передаёт HR заявку на приём, данные кандидата, дату выхода и условия работы. HR проверяет документы, готовит трудовой договор и организует онбординг.',
+            source: 'Регламент оформления сотрудников п.2.1'
+          };
+
+        case 'internship':
+          return {
+            text:
+              'Стажировка оформляется через HR: руководитель согласует наставника, срок, задачи и критерии прохождения. По итогам фиксируется решение о дальнейшем оформлении или завершении стажировки.',
+            source: 'Положение о стажировке п.1.3'
+          };
+
+        case 'liability':
+          return {
+            text:
+              'Материальная ответственность оформляется только для ролей и задач, где это предусмотрено локальными документами. Нужен перечень имущества и договор/акт, подготовленный HR или ответственным подразделением.',
+            source: 'Положение о материальной ответственности п.2.4'
+          };
+
+        case 'bonus':
+          return {
+            text:
+              'Условия премирования зависят от роли, KPI и действующего положения о премировании. Для конкретной выплаты уточните период и тип премии.',
+            source: 'Положение о премировании п.1.1'
+          };
+
+        default:
+          return {
+            text:
+              `Я не нашёл точный ответ в локальной базе знаний и не буду выдумывать факты. Можно передать вопрос в HR: ${hrContact}.`,
+            source: src('fallback'),
+            hrButton: true,
+            mood: 'sad'
+          };
+      }
+    }
+
+    function callHR() {
+      state.requests[currentUser.id] = {
+        workerId: currentUser.id,
+        createdAt: new Date().toISOString(),
+        status: 'open'
+      };
+
+      state.hrChats[currentUser.id] = state.hrChats[currentUser.id] || [];
+      state.hrChats[currentUser.id].push({
+        from: 'system',
+        text: `${currentUser.fullName} вызвал HR из кабинета работника.`,
+        time: new Date().toISOString()
+      });
+
+      saveState();
+
+      botReply(
+        'HR вызван. Я открыл отдельный чат с HR — история переписки будет сохранена локально.',
+        'Контакт HR-поддержки',
+        true
+      );
+
+      setTimeout(() => renderEmployee('hrchat'), 500);
+    }
+
+    function renderWorkerHrChat() {
+      setWorkspace('Чат с HR');
+
+      $('content').innerHTML = `
+        ${employeeTabs('hrchat')}
+        <div class="module" style="margin-top:16px;height:calc(100% - 58px);display:grid;grid-template-rows:auto 1fr auto">
+          <div class="item-head">
+            <div>
+              <h3>Переписка с HR</h3>
+              <div class="muted">История сохраняется в localStorage браузера.</div>
+            </div>
+            <div>
+              <button class="btn dark small" onclick="callHRFromChat()">Вызвать HR</button>
+              <button class="btn danger small" onclick="clearWorkerHrChat()">Очистить чат с HR</button>
+            </div>
+          </div>
+          <div class="hr-messages" id="workerHrMessages"></div>
+          <form class="hr-composer" id="workerHrForm">
+            <input class="field" id="workerHrInput" placeholder="Сообщение HR">
+            <button class="btn">Отправить</button>
+          </form>
+        </div>
+      `;
+
+      renderWorkerHrMessages();
+
+      $('workerHrForm').onsubmit = event => {
+        event.preventDefault();
+
+        const input = $('workerHrInput');
+        const text = input.value.trim();
+
+        if (!text) return;
+
+        state.hrChats[currentUser.id] = state.hrChats[currentUser.id] || [];
+        state.hrChats[currentUser.id].push({
+          from: 'worker',
+          text,
+          time: new Date().toISOString()
+        });
+
+        state.requests[currentUser.id] = {
+          workerId: currentUser.id,
+          createdAt: new Date().toISOString(),
+          status: 'open'
+        };
+
+        saveState();
+        input.value = '';
+        renderWorkerHrMessages();
+      };
+    }
+
+    function callHRFromChat() {
+      state.requests[currentUser.id] = {
+        workerId: currentUser.id,
+        createdAt: new Date().toISOString(),
+        status: 'open'
+      };
+
+      state.hrChats[currentUser.id] = state.hrChats[currentUser.id] || [];
+      state.hrChats[currentUser.id].push({
+        from: 'system',
+        text: `${currentUser.fullName} повторно вызвал HR.`,
+        time: new Date().toISOString()
+      });
+
+      saveState();
+      renderWorkerHrMessages();
+    }
+
+    function renderWorkerHrMessages() {
+      const box = $('workerHrMessages');
+      if (!box) return;
+
+      const messages = state.hrChats[currentUser.id] || [];
+      box.innerHTML = messages.length ? '' : '<div class="notice">Пока сообщений нет. Нажмите «Вызвать HR» или напишите сообщение.</div>';
+
+      messages.forEach(message => {
+        const div = document.createElement('div');
+        div.className = 'hr-msg ' + (message.from === 'worker' ? 'me' : 'them');
+
+        div.textContent =
+          (message.from === 'hr' ? 'HR: ' :
+            message.from === 'system' ? 'Система: ' :
+              'Вы: ') + message.text;
+
+        box.appendChild(div);
+      });
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function clearWorkerHrChat() {
+      if (!confirm('Очистить историю чата с HR для этого работника?')) return;
+
+      state.hrChats[currentUser.id] = [];
+      state.requests[currentUser.id] = {
+        workerId: currentUser.id,
+        createdAt: new Date().toISOString(),
+        status: 'open'
+      };
+
+      saveState();
+      renderWorkerHrMessages();
+    }
+
+    function renderWorkerKedo() {
+      setWorkspace('КЭДО работника');
+
+      const apps = state.applications
+        .filter(app => app.workerId === currentUser.id)
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+      $('content').innerHTML = `
+        ${employeeTabs('kedo')}
+        <div class="module-grid" style="margin-top:16px">
+          <div class="module">
+            <h3>Отправить заявление</h3>
+            <form class="kedo-form" id="kedoForm">
+              <select class="field" id="kedoType">
+                <option>Заявление на отпуск</option>
+                <option>Заявление на перенос отпуска</option>
+                <option>Заявление на справку</option>
+                <option>Заявление на увольнение</option>
+                <option>Другое заявление</option>
+              </select>
+              <textarea class="field" id="kedoText" placeholder="Текст заявления"></textarea>
+              <button class="btn">Отправить руководителю на подпись</button>
+            </form>
+            <div class="hint">Подписать заявление может только руководитель.</div>
+          </div>
+
+          <div class="module">
+            <h3>Мои заявления</h3>
+            <div class="list">
+              ${apps.map(appCard).join('') || '<div class="notice">Заявлений пока нет.</div>'}
+            </div>
+          </div>
+        </div>
+      `;
+
+      $('kedoForm').onsubmit = event => {
+        event.preventDefault();
+
+        const type = $('kedoType').value;
+        const text = $('kedoText').value.trim();
+
+        if (!text) {
+          alert('Введите текст заявления');
+          return;
+        }
+
+        state.applications.push({
+          id: 'app' + Date.now(),
+          workerId: currentUser.id,
+          workerName: currentUser.fullName,
+          type,
+          text,
+          status: 'pending',
+          createdAt: new Date().toISOString(),
+          signedAt: null,
+          signedBy: null
+        });
+
+        saveState();
+        renderWorkerKedo();
+      };
+    }
+
+    function appCard(app) {
+      return `
+        <div class="item">
+          <div class="item-head">
+            <b>${escapeHtml(app.type)}</b>
+            <span class="status ${app.status === 'signed' ? 'signed' : 'pending'}">
+              ${app.status === 'signed' ? 'подписано' : 'ожидает подписи'}
+            </span>
+          </div>
+          <div style="margin-top:8px;white-space:pre-wrap">${escapeHtml(app.text)}</div>
+          <div class="muted" style="margin-top:8px">
+            Отправлено: ${new Date(app.createdAt).toLocaleString('ru-RU')}
+            ${app.signedAt ? ` • Подписал: ${app.signedBy}, ${new Date(app.signedAt).toLocaleString('ru-RU')}` : ''}
+          </div>
+          <span class="source">Основание: ${knowledgeBase.kedo.title}</span>
+        </div>
+      `;
+    }
+
+    function renderManager(tab = 'users') {
+      setWorkspace('Кабинет руководителя');
+
+      if (tab === 'users') renderUsersPage('manager');
+      if (tab === 'register') renderRegisterPage('manager');
+      if (tab === 'docs') renderManagerDocs();
+    }
+
+    function renderHR(tab = 'chats') {
+      setWorkspace('Кабинет HR');
+
+      if (tab === 'chats') renderHrChats();
+      if (tab === 'users') renderUsersPage('hr');
+      if (tab === 'register') renderRegisterPage('hr');
+    }
+
+    function renderUsersPage(viewerRole) {
+      const tabs = viewerRole === 'manager'
+        ? managerTabs('users')
+        : hrTabs('users');
+
+      const rows = state.users.map(user => `
+        <tr>
+          <td>${user.tab}</td>
+          <td><div class="role-cell"><img src="${roleIcon(user.role)}" alt="${roleName(user.role)}"><div>${escapeHtml(user.fullName)}<br><span class="muted">${roleName(user.role)}</span></div></div></td>
+          <td>${escapeHtml(user.email)}</td>
+          <td>${user.vacationDays}/${user.vacationTotalDays}</td>
+          <td>${user.vacationStart || '—'} — ${user.vacationEnd || '—'}</td>
+          <td>${escapeHtml(user.birthday || '—')}</td>
+          <td>${escapeHtml(user.children || '—')}</td>
+          <td>${user.role === 'hr' ? 'да' : 'нет'}</td>
+          <td><button class="btn small secondary" onclick="editUser('${user.id}','${viewerRole}')">Редактировать</button></td>
+        </tr>
+      `).join('');
+
+      $('content').innerHTML = `
+        ${tabs}
+        <div class="module" style="margin-top:16px">
+          <h3>Данные работников${viewerRole === 'manager' ? ' и HR' : ''}</h3>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Таб.</th>
+                  <th>ФИО / роль</th>
+                  <th>Почта</th>
+                  <th>Отпуск</th>
+                  <th>Даты отпуска</th>
+                  <th>Дата рождения</th>
+                  <th>Дети</th>
+                  <th>HR</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+          <div id="editBox" style="margin-top:16px"></div>
+        </div>
+      `;
+    }
+
+    function editUser(id, viewerRole) {
+      const user = state.users.find(x => x.id === id);
+      const canAssignRole = viewerRole === 'manager';
+
+      $('editBox').innerHTML = `
+        <div class="card">
+          <h3>Редактирование: ${escapeHtml(user.fullName)}</h3>
+          <div class="form-grid">
+            <input class="field" id="editFull" value="${escapeHtml(user.fullName)}" placeholder="ФИО">
+            <input class="field" id="editEmail" value="${escapeHtml(user.email)}" placeholder="Почта">
+            <input class="field" id="editPass" value="${escapeHtml(user.password)}" placeholder="Пароль">
+            <input class="field" id="editVac" type="number" value="${user.vacationDays}" placeholder="Дни отпуска">
+            <input class="field" id="editStart" value="${escapeHtml(user.vacationStart || '')}" placeholder="Дата начала отпуска">
+            <input class="field" id="editEnd" value="${escapeHtml(user.vacationEnd || '')}" placeholder="Дата окончания отпуска">
+            <input class="field" id="editBirthday" value="${escapeHtml(user.birthday || '')}" placeholder="Дата рождения, например 21.03">
+            <input class="field" id="editChildren" value="${escapeHtml(user.children || '')}" placeholder="Дети, например 2 ребенка (5 и 9 лет)">
+            ${
+              canAssignRole
+                ? `<select class="field full" id="editRole">
+                    <option value="employee" ${user.role === 'employee' ? 'selected' : ''}>Работник</option>
+                    <option value="hr" ${user.role === 'hr' ? 'selected' : ''}>HR</option>
+                    <option value="manager" ${user.role === 'manager' ? 'selected' : ''}>Руководитель</option>
+                  </select>`
+                : '<div class="notice full">HR может менять данные работников, но не может назначать HR или менять роль.</div>'
+            }
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn" onclick="saveUserEdit('${id}','${viewerRole}')">Сохранить</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function saveUserEdit(id, viewerRole) {
+      const user = state.users.find(x => x.id === id);
+
+      user.fullName = $('editFull').value.trim();
+      user.email = $('editEmail').value.trim();
+      user.password = $('editPass').value.trim();
+      user.vacationDays = Number($('editVac').value || 0);
+      user.vacationStart = $('editStart').value.trim();
+      user.vacationEnd = $('editEnd').value.trim();
+      user.birthday = $('editBirthday').value.trim();
+      user.children = $('editChildren').value.trim();
+      user.aliases = makeAliases(user.fullName);
+
+      const vacationInfo = getVacationInfo(user);
+      if (vacationInfo.start && vacationInfo.end) {
+        user.vacationDays = vacationInfo.remainingDays;
+      }
+
+      if (viewerRole === 'manager') {
+        user.role = $('editRole').value;
+        user.isHR = user.role === 'hr';
+      }
+
+      saveState();
+
+      if (currentUser.id === user.id) currentUser = user;
+
+      setProfile();
+
+      viewerRole === 'manager'
+        ? renderManager('users')
+        : renderHR('users');
+    }
+
+    function renderRegisterPage(viewerRole) {
+      const tabs = viewerRole === 'manager'
+        ? managerTabs('register')
+        : hrTabs('register');
+
+      $('content').innerHTML = `
+        ${tabs}
+        <div class="module" style="margin-top:16px">
+          <h3>Регистрация пользователя</h3>
+          <div class="hint" style="margin-bottom:10px">При регистрации можно сразу указать дату рождения и количество детей — эти данные попадут в карточку сотрудника и ответы бота.</div>
+          <div class="form-grid">
+            <input class="field" id="regTab" placeholder="Табельный номер">
+            <input class="field" id="regFull" placeholder="ФИО">
+            <input class="field" id="regEmail" placeholder="Корпоративная почта">
+            <input class="field" id="regPass" placeholder="Пароль" value="123456">
+            <input class="field" id="regVac" type="number" placeholder="Дни отпуска" value="28">
+            <input class="field" id="regStart" placeholder="Дата начала отпуска">
+            <input class="field" id="regEnd" placeholder="Дата окончания отпуска">
+            <input class="field" id="regBirthday" placeholder="Дата рождения, например 21.03">
+            <input class="field" id="regChildren" placeholder="Дети, например 2 ребенка (5 и 9 лет)">
+            ${
+              viewerRole === 'manager'
+                ? `<select class="field" id="regRole">
+                    <option value="employee">Работник</option>
+                    <option value="hr">HR</option>
+                    <option value="manager">Руководитель</option>
+                  </select>`
+                : '<div class="notice">Роль: работник. HR не может назначать HR.</div>'
+            }
+          </div>
+          <div style="margin-top:12px">
+            <button class="btn" onclick="registerUser('${viewerRole}')">Зарегистрировать</button>
+          </div>
+          <div id="regMsg"></div>
+        </div>
+      `;
+    }
+
+    function registerUser(viewerRole) {
+      const tab = $('regTab').value.trim();
+      const fullName = $('regFull').value.trim();
+      const email = $('regEmail').value.trim();
+
+      if (!tab || !fullName || !email) {
+        $('regMsg').innerHTML = '<div class="error">Заполните табельный номер, ФИО и почту.</div>';
+        return;
+      }
+
+      if (state.users.some(user => user.tab === tab || normalize(user.email) === normalize(email))) {
+        $('regMsg').innerHTML = '<div class="error">Такой табельный номер или почта уже есть.</div>';
+        return;
+      }
+
+      const role = viewerRole === 'manager'
+        ? $('regRole').value
+        : 'employee';
+
+      state.users.push({
+        id: tab,
+        tab,
+        email,
+        password: $('regPass').value || '123456',
+        role,
+        fullName,
+        firstName: fullName.split(' ')[0] || fullName,
+        lastName: fullName.split(' ')[1] || '',
+        aliases: makeAliases(fullName),
+        vacationDays: Number($('regVac').value || 0),
+        vacationTotalDays: 28,
+        vacationStart: $('regStart').value.trim(),
+        vacationEnd: $('regEnd').value.trim(),
+        birthday: $('regBirthday').value.trim(),
+        children: $('regChildren').value.trim(),
+        isHR: role === 'hr'
+      });
+
+      const createdUser = state.users[state.users.length - 1];
+      const vacationInfo = getVacationInfo(createdUser);
+      if (vacationInfo.start && vacationInfo.end) {
+        createdUser.vacationDays = vacationInfo.remainingDays;
+      }
+
+      saveState();
+      $('regMsg').innerHTML = '<div class="ok">Пользователь зарегистрирован локально.</div>';
+    }
+
+    function renderManagerDocs() {
+      const apps = state.applications.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+      $('content').innerHTML = `
+        ${managerTabs('docs')}
+        <div class="module" style="margin-top:16px">
+          <h3>Окно подписания документов КЭДО</h3>
+          <div class="list">
+            ${
+              apps.map(app => `
+                <div class="item">
+                  <div class="item-head">
+                    <div>
+                      <b>${escapeHtml(app.type)}</b>
+                      <div class="muted">${escapeHtml(app.workerName)} • ${new Date(app.createdAt).toLocaleString('ru-RU')}</div>
+                    </div>
+                    <span class="status ${app.status === 'signed' ? 'signed' : 'pending'}">
+                      ${app.status === 'signed' ? 'подписано' : 'ожидает подписи'}
+                    </span>
+                  </div>
+                  <div style="margin-top:8px;white-space:pre-wrap">${escapeHtml(app.text)}</div>
+                  <span class="source">Основание: ${knowledgeBase.kedo.title}</span>
+                  ${
+                    app.status !== 'signed'
+                      ? `<div style="margin-top:10px"><button class="btn small" onclick="signApp('${app.id}')">Подписать руководителем</button></div>`
+                      : `<div class="muted" style="margin-top:8px">Подписал: ${app.signedBy}, ${new Date(app.signedAt).toLocaleString('ru-RU')}</div>`
+                  }
+                </div>
+              `).join('') || '<div class="notice">Заявлений на подпись пока нет.</div>'
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    function signApp(id) {
+      const app = state.applications.find(x => x.id === id);
+
+      app.status = 'signed';
+      app.signedAt = new Date().toISOString();
+      app.signedBy = currentUser.fullName;
+
+      saveState();
+      renderManager('docs');
+    }
+
+    function renderHrChats() {
+      setWorkspace('Кабинет HR');
+
+      const ids = Object.keys(state.requests);
+
+      if (!selectedHrChat && ids.length) selectedHrChat = ids[0];
+
+      $('content').innerHTML = `
+        ${hrTabs('chats')}
+        <div class="hr-chat" style="margin-top:16px">
+          <div class="chat-list" id="hrChatList"></div>
+          <div class="chat-panel">
+            <div class="chat-panel-head">
+              <div>
+                <b id="hrChatTitle">Выберите работника</b>
+                <div class="muted" id="hrChatSub"></div>
+              </div>
+              <button class="btn secondary small" onclick="closeHrRequest()">Закрыть обращение</button>
+            </div>
+            <div class="hr-messages" id="hrMessages"></div>
+            <form class="hr-composer" id="hrForm">
+              <input class="field" id="hrInput" placeholder="Ответ работнику">
+              <button class="btn">Отправить</button>
+            </form>
+          </div>
+        </div>
+      `;
+
+      renderHrChatList();
+      renderHrMessages();
+
+      $('hrForm').onsubmit = event => {
+        event.preventDefault();
+
+        if (!selectedHrChat) return;
+
+        const input = $('hrInput');
+        const text = input.value.trim();
+
+        if (!text) return;
+
+        state.hrChats[selectedHrChat] = state.hrChats[selectedHrChat] || [];
+        state.hrChats[selectedHrChat].push({
+          from: 'hr',
+          text,
+          time: new Date().toISOString(),
+          hrName: currentUser.fullName
+        });
+
+        saveState();
+        input.value = '';
+        renderHrMessages();
+      };
+    }
+
+    function renderHrChatList() {
+      const list = $('hrChatList');
+      if (!list) return;
+
+      const ids = Object.keys(state.requests);
+
+      list.innerHTML = ids.length
+        ? ''
+        : '<div class="notice">Пока нет обращений от работников.</div>';
+
+      ids.forEach(id => {
+        const user = state.users.find(x => x.id === id);
+        const button = document.createElement('button');
+
+        button.className = 'chat-person ' + (selectedHrChat === id ? 'active' : '');
+        button.innerHTML = `
+          <b>${user ? escapeHtml(user.fullName) : id}</b><br>
+          <span class="muted">${state.hrChats[id]?.length || 0} сообщений</span>
+        `;
+
+        button.onclick = () => {
+          selectedHrChat = id;
+          renderHrChats();
+        };
+
+        list.appendChild(button);
+      });
+    }
+
+    function renderHrMessages() {
+      const box = $('hrMessages');
+      if (!box) return;
+
+      const user = state.users.find(x => x.id === selectedHrChat);
+
+      $('hrChatTitle').textContent = user ? user.fullName : 'Выберите работника';
+      $('hrChatSub').textContent = user ? `${user.email} • таб. № ${user.tab}` : '';
+
+      const messages = state.hrChats[selectedHrChat] || [];
+
+      box.innerHTML = selectedHrChat
+        ? (messages.length ? '' : '<div class="notice">История пустая.</div>')
+        : '<div class="notice">Выберите обращение слева.</div>';
+
+      messages.forEach(message => {
+        const div = document.createElement('div');
+        div.className = 'hr-msg ' + (message.from === 'hr' ? 'me' : 'them');
+
+        div.textContent =
+          (message.from === 'hr' ? 'Вы: ' :
+            message.from === 'worker' ? 'Работник: ' :
+              'Система: ') + message.text;
+
+        box.appendChild(div);
+      });
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function closeHrRequest() {
+      if (!selectedHrChat) return;
+
+      delete state.requests[selectedHrChat];
+
+      saveState();
+
+      selectedHrChat = null;
+      renderHrChats();
+    }
+
+    loadState();
+    renderSources();
+    logout();
+  </script>
 </body>
 </html>
