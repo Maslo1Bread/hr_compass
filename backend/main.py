@@ -368,7 +368,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="HR Assistant", lifespan=lifespan)
-FRONTEND_INDEX_PATH = Path(__file__).resolve().parents[1] / "frontend" / "index.html"
+FRONTEND_INDEX_PATH = Path(__file__).resolve().parents[1] / "index.html"
 
 app.add_middleware(
     CORSMiddleware,
